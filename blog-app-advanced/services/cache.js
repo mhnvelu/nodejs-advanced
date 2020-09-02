@@ -9,8 +9,18 @@ client.get = util.promisify(client.get);
 
 const exec = mongoose.Query.prototype.exec;
 
+// Toggleable Cache
+mongoose.Query.prototype.cache = function () {
+  this.useCache = true;
+  return this;
+};
+
 mongoose.Query.prototype.exec = async function () {
   console.log("Mongoose Query exec hook for redis");
+
+  if (!this.useCache) {
+    return await exec.apply(this, arguments);
+  }
 
   const redisKey = JSON.stringify({
     ...this.getQuery(),
