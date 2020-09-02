@@ -46,6 +46,8 @@ mongoose.Query.prototype.exec = async function () {
   // If No, then respond to the request and update the cache to store the data
 
   const result = await exec.apply(this, arguments);
-  client.set(redisKey, JSON.stringify(result));
+
+  //set cache with expiration of 10s
+  client.set(redisKey, JSON.stringify(result), "EX", 10);
   return result;
 };
