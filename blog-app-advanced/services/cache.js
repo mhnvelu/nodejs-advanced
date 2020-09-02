@@ -5,13 +5,14 @@ const redisUrl = "redis://127.0.0.1:6379";
 const client = redis.createClient(redisUrl);
 
 // promisify converts a function which accepts callback into a function which returns promise.
-client.get = util.promisify(client.get);
+client.hget = util.promisify(client.hget);
 
 const exec = mongoose.Query.prototype.exec;
 
 // Toggleable Cache
-mongoose.Query.prototype.cache = function () {
+mongoose.Query.prototype.cache = function (options = {}) {
   this.useCache = true;
+  this.hashKey = JSON.stringify(options.key || "");
   return this;
 };
 
@@ -29,7 +30,7 @@ mongoose.Query.prototype.exec = async function () {
   console.log(redisKey);
 
   // Do we have any cached data in redis for this redisKey?
-  const cachedValue = await client.get(redisKey);
+  const cachedValue = await client.hget(this.hashKey, redisKey);
   // If Yes, then respond to the request and return
   if (cachedValue) {
     console.log("Serving from cache");
@@ -48,6 +49,12 @@ mongoose.Query.prototype.exec = async function () {
   const result = await exec.apply(this, arguments);
 
   //set cache with expiration of 10s
-  client.set(redisKey, JSON.stringify(result), "EX", 10);
+  client.hmset(this.hashKey, redisKey, JSON.stringify(result), "EX", 10);
   return result;
+};
+
+module.exports = {
+  clear(hashKey) {
+    client.del(JSON.stringify(hashKey));
+  },
 };
