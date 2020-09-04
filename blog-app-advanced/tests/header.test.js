@@ -1,4 +1,6 @@
 const puppeteer = require("puppeteer");
+const sessionFactory = require("./factories/sessionFactory");
+const userFactory = require("./factories/userFactory");
 
 let browser, page;
 
@@ -13,7 +15,7 @@ beforeEach(async () => {
 
 // Browser termination
 afterEach(async () => {
-  // await browser.close();
+  await browser.close();
 });
 
 test("Header has correct text", async () => {
@@ -28,35 +30,16 @@ test("Clicking login starts OAuth flow", async () => {
   expect(url).toMatch(/accounts\.google\.com/);
 });
 
-test.only("Check Logout button exists after login", async () => {
-  // In this test, session is faked
-  const userId = "5f47e956b5309960c80adff9";
-  const Buffer = require("safe-buffer").Buffer;
-
-  // Passport stores in this structure in session.
-  const sessionObject = {
-    passport: {
-      user: userId,
-    },
-  };
-
-  // sessionsString is equivalent of session in set-cookie response header
-  const sessionString = Buffer.from(JSON.stringify(sessionObject)).toString(
-    "base64"
-  );
-
-  const Keygrip = require("keygrip");
-  const keys = require("../config/keys");
-  const keygrip = new Keygrip([keys.cookieKey]);
-  // sessionSignature is equivalent os session.sig in set-cookie response header
-  const sessionSignature = keygrip.sign("session=" + sessionString);
-
-  console.log(sessionString);
-  console.log(sessionSignature);
+test("Check Logout button exists after login", async () => {
+  const user = await userFactory();
+  const session = sessionFactory(user);
 
   // Get the cookie names from the response headers
-  await page.setCookie({ name: "session", value: sessionString });
-  await page.setCookie({ name: "session.sig", value: sessionSignature });
+  await page.setCookie({ name: "session", value: session.sessionString });
+  await page.setCookie({
+    name: "session.sig",
+    value: session.sessionSignature,
+  });
 
   await page.goto("localhost:3000");
 
