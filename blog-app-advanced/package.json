@@ -30,5 +30,8 @@
     "puppeteer": "^5.2.1",
     "redis": "^3.0.2",
     "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "safe-buffer": "^5.2.1"
   }
 }

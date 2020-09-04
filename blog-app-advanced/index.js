@@ -21,6 +21,8 @@ mongoose
 const app = express();
 
 app.use(bodyParser.json());
+
+// server sets cookie on users browser that identifies them
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
