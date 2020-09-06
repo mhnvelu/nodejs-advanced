@@ -1,25 +1,23 @@
-const puppeteer = require("puppeteer");
+const Page = require("./helpers/Page");
 const sessionFactory = require("./factories/sessionFactory");
 const userFactory = require("./factories/userFactory");
 
-let browser, page;
+let page;
 
 // Launch browser and page before each testcase
 beforeEach(async () => {
-  browser = await puppeteer.launch({
-    headless: false,
-  });
-  page = await browser.newPage();
+  page = await Page.build();
   await page.goto("localhost:3000");
 });
 
 // Browser termination
 afterEach(async () => {
-  await browser.close();
+  await page.close();
 });
 
 test("Header has correct text", async () => {
   // This code is serilazed as text, executed on chromium as JS and gets the result as text
+  await page.waitFor("a.brand-logo");
   const text = await page.$eval("a.brand-logo", (el) => el.innerHTML);
   expect(text).toEqual("Blogster");
 });
