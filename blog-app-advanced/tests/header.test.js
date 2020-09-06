@@ -1,4 +1,4 @@
-const Page = require("./helpers/Page");
+const Page = require("./helpers/page");
 
 let page;
 
@@ -16,7 +16,7 @@ afterEach(async () => {
 test("Header has correct text", async () => {
   // This code is serilazed as text, executed on chromium as JS and gets the result as text
   await page.waitFor("a.brand-logo");
-  const text = page.getContentsOf("a.brand-logo");
+  const text = await page.getContentsOf("a.brand-logo");
   expect(text).toEqual("Blogster");
 });
 

@@ -37,7 +37,7 @@ class CustomPage {
       value: session.sessionSignature,
     });
 
-    await this.page.goto("localhost:3000");
+    await this.page.goto("localhost:3000/blogs");
     //wait for chromium to render the page till the element with this selector available
     await this.page.waitFor('a[href="/auth/logout"]');
   }
