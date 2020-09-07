@@ -30,6 +30,30 @@ describe("When logged in", () => {
     expect(content).toEqual("Content");
   });
 
+  describe("using valid inputs", () => {
+    beforeEach(async () => {
+      await page.type(".title input", "My Title");
+      await page.type(".content input", "My Content");
+      await page.click("form button");
+    });
+
+    test("submitting the form takes the user to review screen", async () => {
+      const reviewPageTitle = await page.getContentsOf("h5");
+      expect(reviewPageTitle).toEqual("Please confirm your entries");
+    });
+
+    test("submitting and saving adds blog to index page", async () => {
+      await page.click("button.green");
+      // Save sends the request to server. so we need to waitFor new page to arrive before proceeding with the test
+      await page.waitFor(".card");
+
+      const title = await page.getContentsOf(".card-title");
+      const content = await page.getContentsOf(".card-content p");
+      expect(title).toEqual("My Title");
+      expect(content).toEqual("My Content");
+    });
+  });
+
   describe("using invalid inputs", () => {
     beforeEach(async () => {
       await page.click("form button");
