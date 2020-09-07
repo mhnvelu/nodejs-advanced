@@ -13,15 +13,20 @@ afterEach(async () => {
   await page.close();
 });
 
-test("When logged in, can see blog create form", async () => {
-  await page.login();
-  await page.click("a.btn-floating");
-  const url = await page.url();
-  expect(url).toMatch(/blogs\/new/);
+describe("When logged in", () => {
+  beforeEach(async () => {
+    await page.login();
+    await page.click("a.btn-floating");
+  });
 
-  const title = await page.getContentsOf("form .title label");
-  expect(title).toEqual("Blog Title");
+  test("can see blog create form", async () => {
+    const url = await page.url();
+    expect(url).toMatch(/blogs\/new/);
 
-  const content = await page.getContentsOf("form .content label");
-  expect(content).toEqual("Content");
+    const title = await page.getContentsOf("form .title label");
+    expect(title).toEqual("Blog Title");
+
+    const content = await page.getContentsOf("form .content label");
+    expect(content).toEqual("Content");
+  });
 });
