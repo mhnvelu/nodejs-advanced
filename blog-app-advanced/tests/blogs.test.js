@@ -29,4 +29,18 @@ describe("When logged in", () => {
     const content = await page.getContentsOf("form .content label");
     expect(content).toEqual("Content");
   });
+
+  describe("using invalid inputs", () => {
+    beforeEach(async () => {
+      await page.click("form button");
+    });
+
+    test("the form shows an error message", async () => {
+      const titleError = await page.getContentsOf("form .title .red-text");
+      expect(titleError).toEqual("You must provide a value");
+
+      const contentError = await page.getContentsOf("form .content .red-text");
+      expect(contentError).toEqual("You must provide a value");
+    });
+  });
 });

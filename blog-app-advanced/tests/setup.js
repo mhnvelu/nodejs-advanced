@@ -1,3 +1,4 @@
+// Timeout for individual test case
 jest.setTimeout(30000);
 
 require("../models/User");
