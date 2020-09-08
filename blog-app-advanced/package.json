@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "jest": {
-    "setupFilesAfterEnv": [
-      "./tests/setup.js"
-    ],
+    "setupFilesAfterEnv": ["./tests/setup.js"],
     "testEnvironment": "node",
     "globalTeardown": "./tests/tearDown.js"
   },
@@ -17,7 +15,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
     "heroku-postbuild": "npm run build",
-    "test": "jest"
+    "test": "jest --forceExit"
   },
   "author": "",
   "license": "ISC",
@@ -39,7 +37,6 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "leaked-handles": "^5.2.0",
     "safe-buffer": "^5.2.1"
   }
 }
