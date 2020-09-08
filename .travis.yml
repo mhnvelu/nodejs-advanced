@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "8"
+dist: trusty
+services:
+  - mongodb
+  - redis-server
+env:
+  - NODE_ENV=ci PORT=3000
+cache:
+  directories:
+    - "blog-app-advanced/node_modules"
+    - "blog-app-advanced/client/node_modules"
+install:
+  - npm install --prefix blog-app-advanced
+  - npm run build --prefix blog-app-advanced
+script:
+  - nohup npm run start --prefix blog-app-advanced &
+  - sleep 3
+  - npm run test --prefix blog-app-advanced
