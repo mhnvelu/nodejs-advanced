@@ -9,7 +9,8 @@ class CustomPage {
 
   static async build() {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
+      args: ["--no-sandbox"],
     });
     const page = await browser.newPage();
     const customPage = new CustomPage(page);
@@ -37,7 +38,7 @@ class CustomPage {
       value: session.sessionSignature,
     });
 
-    await this.page.goto("localhost:3000/blogs");
+    await this.page.goto("http://localhost:3000/blogs");
     //wait for chromium to render the page till the element with this selector available
     await this.page.waitFor('a[href="/auth/logout"]');
   }
