@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "jest": {
-    "setupFilesAfterEnv": ["./tests/setup.js"],
+    "setupFilesAfterEnv": [
+      "./tests/setup.js"
+    ],
     "testEnvironment": "node",
     "globalTeardown": "./tests/tearDown.js"
   },
@@ -20,7 +22,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.188.0",
+    "aws-sdk": "^2.749.0",
     "body-parser": "^1.17.2",
     "concurrently": "^3.5.0",
     "cookie-session": "^2.0.0-beta.2",
@@ -34,7 +36,7 @@
     "path-parser": "^2.0.2",
     "puppeteer": "^5.2.1",
     "redis": "^3.0.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "safe-buffer": "^5.2.1"
